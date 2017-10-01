@@ -32,7 +32,8 @@
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": [
-      "en"
+      "en",
+      "ru"
     ]
   }
 }

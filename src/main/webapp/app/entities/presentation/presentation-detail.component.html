@@ -1,0 +1,43 @@
+
+<div *ngIf="presentation">
+    <h2><span jhiTranslate="conferenceApp.presentation.detail.title">Presentation</span> {{presentation.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="conferenceApp.presentation.name">Name</span></dt>
+        <dd>
+            <span>{{presentation.name}}</span>
+        </dd>
+        <dt><span jhiTranslate="conferenceApp.presentation.category">Category</span></dt>
+        <dd>
+            <span>{{presentation.category}}</span>
+        </dd>
+        <dt><span jhiTranslate="conferenceApp.presentation.startTime">Start Time</span></dt>
+        <dd>
+            <span>{{presentation.startTime | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="conferenceApp.presentation.endTime">End Time</span></dt>
+        <dd>
+            <span>{{presentation.endTime | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="conferenceApp.presentation.user">User</span></dt>
+        <dd>
+            <span *ngFor="let user of presentation.users; let last = last">
+                {{user.firstName}}{{last ? '' : ', '}}
+            </span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'presentation/'+ presentation.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>
