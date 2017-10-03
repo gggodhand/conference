@@ -1,9 +1,12 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -22,6 +25,10 @@ public class Room implements Serializable {
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "room")
+    @JsonIgnore
+    private Set<Schedule> schedules = new HashSet<>();
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public Long getId() {
@@ -43,6 +50,31 @@ public class Room implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public Room schedules(Set<Schedule> schedules) {
+        this.schedules = schedules;
+        return this;
+    }
+
+    public Room addSchedules(Schedule schedule) {
+        this.schedules.add(schedule);
+        schedule.setRoom(this);
+        return this;
+    }
+
+    public Room removeSchedules(Schedule schedule) {
+        this.schedules.remove(schedule);
+        schedule.setRoom(null);
+        return this;
+    }
+
+    public void setSchedules(Set<Schedule> schedules) {
+        this.schedules = schedules;
     }
     // jhipster-needle-entity-add-getters-setters - Jhipster will add getters and setters here, do not remove
 

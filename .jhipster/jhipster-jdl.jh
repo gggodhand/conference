@@ -13,7 +13,7 @@ entity Schedule {
 }
 
 relationship ManyToOne {
-	Schedule{room(name)} to Room,
+	Schedule{room(name)} to Room{schedules},
     Schedule{presentation(name)} to Presentation
 }
 

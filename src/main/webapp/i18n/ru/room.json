@@ -1,0 +1,22 @@
+{
+    "conferenceApp": {
+        "room" : {
+            "home": {
+                "title": "Аудитории",
+                "createLabel": "Создать аудиторию",
+                "createOrEditLabel": "Создать или отредактировать Аудиторию"
+            },
+            "created": "Новый Room создан с идентификатором {{ param }}",
+            "updated": "Room обновлен с идентификатором {{ param }}",
+            "deleted": "Room удален с идентификатором {{ param }}",
+            "delete": {
+                "question": "Вы уверены что хотите удалить Room {{ id }}?"
+            },
+            "detail": {
+                "title": "Room"
+            },
+            "name": "Name",
+            "schedules": "Schedules"
+        }
+    }
+}
