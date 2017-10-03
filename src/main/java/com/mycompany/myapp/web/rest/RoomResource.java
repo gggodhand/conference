@@ -4,11 +4,13 @@ import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.Room;
 
 import com.mycompany.myapp.repository.RoomRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,6 +45,7 @@ public class RoomResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/rooms")
+    @Secured(AuthoritiesConstants.PRESENTER)
     @Timed
     public ResponseEntity<Room> createRoom(@Valid @RequestBody Room room) throws URISyntaxException {
         log.debug("REST request to save Room : {}", room);
@@ -65,6 +68,7 @@ public class RoomResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/rooms")
+    @Secured(AuthoritiesConstants.PRESENTER)
     @Timed
     public ResponseEntity<Room> updateRoom(@Valid @RequestBody Room room) throws URISyntaxException {
         log.debug("REST request to update Room : {}", room);
@@ -110,6 +114,7 @@ public class RoomResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/rooms/{id}")
+    @Secured(AuthoritiesConstants.PRESENTER)
     @Timed
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         log.debug("REST request to delete Room : {}", id);

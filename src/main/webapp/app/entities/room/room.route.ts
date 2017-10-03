@@ -14,7 +14,7 @@ export const roomRoute: Routes = [
         path: 'room',
         component: RoomComponent,
         data: {
-            authorities: ['ROLE_ADMIN'],
+            authorities: [''],
             pageTitle: 'conferenceApp.room.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -22,7 +22,7 @@ export const roomRoute: Routes = [
         path: 'room/:id',
         component: RoomDetailComponent,
         data: {
-            authorities: ['ROLE_ADMIN'],
+            authorities: [''],
             pageTitle: 'conferenceApp.room.home.title'
         },
         canActivate: [UserRouteAccessService]
