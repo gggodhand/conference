@@ -1,9 +1,12 @@
 package com.mycompany.myapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.mycompany.myapp.domain.Presentation;
 import com.mycompany.myapp.domain.Room;
 
+import com.mycompany.myapp.domain.Schedule;
 import com.mycompany.myapp.repository.RoomRepository;
+import com.mycompany.myapp.repository.ScheduleRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -19,6 +22,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Room.
@@ -32,9 +36,11 @@ public class RoomResource {
     private static final String ENTITY_NAME = "room";
 
     private final RoomRepository roomRepository;
+    private final ScheduleRepository scheduleRepository;
 
-    public RoomResource(RoomRepository roomRepository) {
+    public RoomResource(RoomRepository roomRepository, ScheduleRepository scheduleRepository) {
         this.roomRepository = roomRepository;
+        this.scheduleRepository = scheduleRepository;
     }
 
     /**
@@ -90,9 +96,24 @@ public class RoomResource {
     @Timed
     public List<Room> getAllRooms() {
         log.debug("REST request to get all Rooms");
-        return roomRepository.findAll();
-        }
+        return  roomRepository.findAll();
+    }
 
+    @GetMapping("/roomPresentations")
+    @Timed
+    public List<Room> getAllRoomsWithPresentations() {
+        log.debug("REST request to get all Rooms");
+        List<Room> allRooms = roomRepository.findAll();
+
+        allRooms.forEach(room -> room.setPresentations(
+            scheduleRepository.findAllByRoom_id(room.getId())
+                .stream()
+                    .map(Schedule::getPresentation)
+                    .collect(Collectors.toList())
+        ));
+
+        return allRooms;
+    }
     /**
      * GET  /rooms/:id : get the "id" room.
      *

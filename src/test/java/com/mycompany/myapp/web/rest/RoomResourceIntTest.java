@@ -62,7 +62,7 @@ public class RoomResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RoomResource roomResource = new RoomResource(roomRepository);
+        final RoomResource roomResource = new RoomResource(roomRepository, null);
         this.restRoomMockMvc = MockMvcBuilders.standaloneSetup(roomResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

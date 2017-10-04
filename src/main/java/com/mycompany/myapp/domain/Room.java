@@ -1,13 +1,11 @@
 package com.mycompany.myapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A Room.
@@ -26,9 +24,9 @@ public class Room implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "room")
-    @JsonIgnore
-    private Set<Schedule> schedules = new HashSet<>();
+    @Transient
+    @JsonProperty
+    private List<Presentation> presentations = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public Long getId() {
@@ -52,29 +50,17 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public Set<Schedule> getSchedules() {
-        return schedules;
+    public List<Presentation> getPresentations() {
+        return presentations;
     }
 
-    public Room schedules(Set<Schedule> schedules) {
-        this.schedules = schedules;
+    public Room presentations(List<Presentation> presentations) {
+        this.presentations = presentations;
         return this;
     }
 
-    public Room addSchedules(Schedule schedule) {
-        this.schedules.add(schedule);
-        schedule.setRoom(this);
-        return this;
-    }
-
-    public Room removeSchedules(Schedule schedule) {
-        this.schedules.remove(schedule);
-        schedule.setRoom(null);
-        return this;
-    }
-
-    public void setSchedules(Set<Schedule> schedules) {
-        this.schedules = schedules;
+    public void setPresentations(List<Presentation> presentations) {
+        this.presentations = presentations;
     }
     // jhipster-needle-entity-add-getters-setters - Jhipster will add getters and setters here, do not remove
 

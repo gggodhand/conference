@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
             this.account = account;
         });
 
-        this.roomService.query().subscribe(
+        this.roomService.queryWithPresentations().subscribe(
             (res: ResponseWrapper) => {
                 this.rooms = res.json;
             },
