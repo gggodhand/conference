@@ -19,8 +19,6 @@
             <th><span jhiTranslate="global.field.id">ID</span></th>
             <th><span jhiTranslate="conferenceApp.presentation.name">Name</span></th>
             <th><span jhiTranslate="conferenceApp.presentation.category">Category</span></th>
-            <th><span jhiTranslate="conferenceApp.presentation.startTime">Start Time</span></th>
-            <th><span jhiTranslate="conferenceApp.presentation.endTime">End Time</span></th>
             <th><span jhiTranslate="conferenceApp.presentation.user">User</span></th>
             <th></th>
             </tr>
@@ -30,8 +28,6 @@
                 <td><a [routerLink]="['../presentation', presentation.id ]">{{presentation.id}}</a></td>
                 <td>{{presentation.name}}</td>
                 <td>{{presentation.category}}</td>
-                <td>{{presentation.startTime | date:'medium'}}</td>
-                <td>{{presentation.endTime | date:'medium'}}</td>
                 <td>
                     <span *ngFor="let user of presentation.users; let last = last">
                             {{user.firstName}}{{last ? '' : ', '}}

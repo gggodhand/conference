@@ -4,7 +4,6 @@ package com.mycompany.myapp.domain;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -28,14 +27,6 @@ public class Presentation implements Serializable {
 
     @Column(name = "category")
     private String category;
-
-    @NotNull
-    @Column(name = "start_time", nullable = false)
-    private ZonedDateTime startTime;
-
-    @NotNull
-    @Column(name = "end_time", nullable = false)
-    private ZonedDateTime endTime;
 
     @ManyToMany
     @JoinTable(name = "presentation_user",
@@ -76,32 +67,6 @@ public class Presentation implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public ZonedDateTime getStartTime() {
-        return startTime;
-    }
-
-    public Presentation startTime(ZonedDateTime startTime) {
-        this.startTime = startTime;
-        return this;
-    }
-
-    public void setStartTime(ZonedDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public ZonedDateTime getEndTime() {
-        return endTime;
-    }
-
-    public Presentation endTime(ZonedDateTime endTime) {
-        this.endTime = endTime;
-        return this;
-    }
-
-    public void setEndTime(ZonedDateTime endTime) {
-        this.endTime = endTime;
     }
 
     public Set<User> getUsers() {
@@ -154,8 +119,6 @@ public class Presentation implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", category='" + getCategory() + "'" +
-            ", startTime='" + getStartTime() + "'" +
-            ", endTime='" + getEndTime() + "'" +
             "}";
     }
 }

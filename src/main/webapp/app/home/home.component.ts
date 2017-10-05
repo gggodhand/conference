@@ -34,14 +34,18 @@ export class HomeComponent implements OnInit {
             this.account = account;
         });
 
+        this.load();
+
+        this.registerAuthenticationSuccess();
+    }
+
+    public load() {
         this.roomService.queryWithPresentations().subscribe(
             (res: ResponseWrapper) => {
                 this.rooms = res.json;
             },
             (res: ResponseWrapper) => this.onError(res.json)
         );
-
-        this.registerAuthenticationSuccess();
     }
 
     registerAuthenticationSuccess() {

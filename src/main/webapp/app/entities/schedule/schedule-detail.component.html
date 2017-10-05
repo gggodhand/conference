@@ -4,6 +4,14 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="conferenceApp.schedule.startTime">Start Time</span></dt>
+        <dd>
+            <span>{{schedule.startTime | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="conferenceApp.schedule.endTime">End Time</span></dt>
+        <dd>
+            <span>{{schedule.endTime | date:'medium'}}</span>
+        </dd>
         <dt><span jhiTranslate="conferenceApp.schedule.room">Room</span></dt>
         <dd>
             <div *ngIf="schedule.room">

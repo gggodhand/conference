@@ -21,20 +21,6 @@
         {
             "fieldName": "category",
             "fieldType": "String"
-        },
-        {
-            "fieldName": "startTime",
-            "fieldType": "ZonedDateTime",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "endTime",
-            "fieldType": "ZonedDateTime",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "changelogDate": "20171001173931",

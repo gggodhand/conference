@@ -1,7 +1,6 @@
 import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { DatePipe } from '@angular/common';
 import { Presentation } from './presentation.model';
 import { PresentationService } from './presentation.service';
 
@@ -10,7 +9,6 @@ export class PresentationPopupService {
     private ngbModalRef: NgbModalRef;
 
     constructor(
-        private datePipe: DatePipe,
         private modalService: NgbModal,
         private router: Router,
         private presentationService: PresentationService
@@ -28,10 +26,6 @@ export class PresentationPopupService {
 
             if (id) {
                 this.presentationService.find(id).subscribe((presentation) => {
-                    presentation.startTime = this.datePipe
-                        .transform(presentation.startTime, 'yyyy-MM-ddTHH:mm:ss');
-                    presentation.endTime = this.datePipe
-                        .transform(presentation.endTime, 'yyyy-MM-ddTHH:mm:ss');
                     this.ngbModalRef = this.presentationModalRef(component, presentation);
                     resolve(this.ngbModalRef);
                 });

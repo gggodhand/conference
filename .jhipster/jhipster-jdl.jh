@@ -5,11 +5,11 @@ entity Room {
 entity Presentation {
 	name String required
     category String
-    startTime ZonedDateTime required
-    endTime ZonedDateTime required
 }
 
 entity Schedule {
+    startTime ZonedDateTime required
+    endTime ZonedDateTime required
 }
 
 relationship ManyToOne {

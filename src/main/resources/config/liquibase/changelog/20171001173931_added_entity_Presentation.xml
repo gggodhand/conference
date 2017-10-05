@@ -30,18 +30,8 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="start_time" type="timestamp">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="end_time" type="timestamp">
-                <constraints nullable="false" />
-            </column>
-
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        <dropDefaultValue tableName="presentation" columnName="start_time" columnDataType="datetime"/>
-        <dropDefaultValue tableName="presentation" columnName="end_time" columnDataType="datetime"/>
         
         <createTable tableName="presentation_user">
             <column name="users_id" type="bigint">

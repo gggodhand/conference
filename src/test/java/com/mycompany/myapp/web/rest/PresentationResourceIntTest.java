@@ -21,13 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.ZoneOffset;
-import java.time.ZoneId;
 import java.util.List;
 
-import static com.mycompany.myapp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -47,12 +42,6 @@ public class PresentationResourceIntTest {
 
     private static final String DEFAULT_CATEGORY = "AAAAAAAAAA";
     private static final String UPDATED_CATEGORY = "BBBBBBBBBB";
-
-    private static final ZonedDateTime DEFAULT_START_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_START_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-
-    private static final ZonedDateTime DEFAULT_END_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_END_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     @Autowired
     private PresentationRepository presentationRepository;
@@ -92,9 +81,7 @@ public class PresentationResourceIntTest {
     public static Presentation createEntity(EntityManager em) {
         Presentation presentation = new Presentation()
             .name(DEFAULT_NAME)
-            .category(DEFAULT_CATEGORY)
-            .startTime(DEFAULT_START_TIME)
-            .endTime(DEFAULT_END_TIME);
+            .category(DEFAULT_CATEGORY);
         return presentation;
     }
 
@@ -120,8 +107,6 @@ public class PresentationResourceIntTest {
         Presentation testPresentation = presentationList.get(presentationList.size() - 1);
         assertThat(testPresentation.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testPresentation.getCategory()).isEqualTo(DEFAULT_CATEGORY);
-        assertThat(testPresentation.getStartTime()).isEqualTo(DEFAULT_START_TIME);
-        assertThat(testPresentation.getEndTime()).isEqualTo(DEFAULT_END_TIME);
     }
 
     @Test
@@ -163,42 +148,6 @@ public class PresentationResourceIntTest {
 
     @Test
     @Transactional
-    public void checkStartTimeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = presentationRepository.findAll().size();
-        // set the field null
-        presentation.setStartTime(null);
-
-        // Create the Presentation, which fails.
-
-        restPresentationMockMvc.perform(post("/api/presentations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(presentation)))
-            .andExpect(status().isBadRequest());
-
-        List<Presentation> presentationList = presentationRepository.findAll();
-        assertThat(presentationList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkEndTimeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = presentationRepository.findAll().size();
-        // set the field null
-        presentation.setEndTime(null);
-
-        // Create the Presentation, which fails.
-
-        restPresentationMockMvc.perform(post("/api/presentations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(presentation)))
-            .andExpect(status().isBadRequest());
-
-        List<Presentation> presentationList = presentationRepository.findAll();
-        assertThat(presentationList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllPresentations() throws Exception {
         // Initialize the database
         presentationRepository.saveAndFlush(presentation);
@@ -209,9 +158,7 @@ public class PresentationResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(presentation.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY.toString())))
-            .andExpect(jsonPath("$.[*].startTime").value(hasItem(sameInstant(DEFAULT_START_TIME))))
-            .andExpect(jsonPath("$.[*].endTime").value(hasItem(sameInstant(DEFAULT_END_TIME))));
+            .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY.toString())));
     }
 
     @Test
@@ -226,9 +173,7 @@ public class PresentationResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(presentation.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY.toString()))
-            .andExpect(jsonPath("$.startTime").value(sameInstant(DEFAULT_START_TIME)))
-            .andExpect(jsonPath("$.endTime").value(sameInstant(DEFAULT_END_TIME)));
+            .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY.toString()));
     }
 
     @Test
@@ -250,9 +195,7 @@ public class PresentationResourceIntTest {
         Presentation updatedPresentation = presentationRepository.findOne(presentation.getId());
         updatedPresentation
             .name(UPDATED_NAME)
-            .category(UPDATED_CATEGORY)
-            .startTime(UPDATED_START_TIME)
-            .endTime(UPDATED_END_TIME);
+            .category(UPDATED_CATEGORY);
 
         restPresentationMockMvc.perform(put("/api/presentations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -265,8 +208,6 @@ public class PresentationResourceIntTest {
         Presentation testPresentation = presentationList.get(presentationList.size() - 1);
         assertThat(testPresentation.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testPresentation.getCategory()).isEqualTo(UPDATED_CATEGORY);
-        assertThat(testPresentation.getStartTime()).isEqualTo(UPDATED_START_TIME);
-        assertThat(testPresentation.getEndTime()).isEqualTo(UPDATED_END_TIME);
     }
 
     @Test

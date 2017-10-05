@@ -12,14 +12,6 @@
         <dd>
             <span>{{presentation.category}}</span>
         </dd>
-        <dt><span jhiTranslate="conferenceApp.presentation.startTime">Start Time</span></dt>
-        <dd>
-            <span>{{presentation.startTime | date:'medium'}}</span>
-        </dd>
-        <dt><span jhiTranslate="conferenceApp.presentation.endTime">End Time</span></dt>
-        <dd>
-            <span>{{presentation.endTime | date:'medium'}}</span>
-        </dd>
         <dt><span jhiTranslate="conferenceApp.presentation.user">User</span></dt>
         <dd>
             <span *ngFor="let user of presentation.users; let last = last">

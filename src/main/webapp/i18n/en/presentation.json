@@ -17,8 +17,6 @@
             },
             "name": "Name",
             "category": "Category",
-            "startTime": "Start Time",
-            "endTime": "End Time",
             "user": "User"
         }
     }

@@ -21,8 +21,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.List;
 
+import static com.mycompany.myapp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,6 +41,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ConferenceApp.class)
 public class ScheduleResourceIntTest {
+
+    private static final ZonedDateTime DEFAULT_START_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_START_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+
+    private static final ZonedDateTime DEFAULT_END_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_END_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     @Autowired
     private ScheduleRepository scheduleRepository;
@@ -73,7 +84,9 @@ public class ScheduleResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static Schedule createEntity(EntityManager em) {
-        Schedule schedule = new Schedule();
+        Schedule schedule = new Schedule()
+            .startTime(DEFAULT_START_TIME)
+            .endTime(DEFAULT_END_TIME);
         return schedule;
     }
 
@@ -97,6 +110,8 @@ public class ScheduleResourceIntTest {
         List<Schedule> scheduleList = scheduleRepository.findAll();
         assertThat(scheduleList).hasSize(databaseSizeBeforeCreate + 1);
         Schedule testSchedule = scheduleList.get(scheduleList.size() - 1);
+        assertThat(testSchedule.getStartTime()).isEqualTo(DEFAULT_START_TIME);
+        assertThat(testSchedule.getEndTime()).isEqualTo(DEFAULT_END_TIME);
     }
 
     @Test
@@ -120,6 +135,42 @@ public class ScheduleResourceIntTest {
 
     @Test
     @Transactional
+    public void checkStartTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = scheduleRepository.findAll().size();
+        // set the field null
+        schedule.setStartTime(null);
+
+        // Create the Schedule, which fails.
+
+        restScheduleMockMvc.perform(post("/api/schedules")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(schedule)))
+            .andExpect(status().isBadRequest());
+
+        List<Schedule> scheduleList = scheduleRepository.findAll();
+        assertThat(scheduleList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkEndTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = scheduleRepository.findAll().size();
+        // set the field null
+        schedule.setEndTime(null);
+
+        // Create the Schedule, which fails.
+
+        restScheduleMockMvc.perform(post("/api/schedules")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(schedule)))
+            .andExpect(status().isBadRequest());
+
+        List<Schedule> scheduleList = scheduleRepository.findAll();
+        assertThat(scheduleList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllSchedules() throws Exception {
         // Initialize the database
         scheduleRepository.saveAndFlush(schedule);
@@ -128,7 +179,9 @@ public class ScheduleResourceIntTest {
         restScheduleMockMvc.perform(get("/api/schedules?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(schedule.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(schedule.getId().intValue())))
+            .andExpect(jsonPath("$.[*].startTime").value(hasItem(sameInstant(DEFAULT_START_TIME))))
+            .andExpect(jsonPath("$.[*].endTime").value(hasItem(sameInstant(DEFAULT_END_TIME))));
     }
 
     @Test
@@ -141,7 +194,9 @@ public class ScheduleResourceIntTest {
         restScheduleMockMvc.perform(get("/api/schedules/{id}", schedule.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(schedule.getId().intValue()));
+            .andExpect(jsonPath("$.id").value(schedule.getId().intValue()))
+            .andExpect(jsonPath("$.startTime").value(sameInstant(DEFAULT_START_TIME)))
+            .andExpect(jsonPath("$.endTime").value(sameInstant(DEFAULT_END_TIME)));
     }
 
     @Test
@@ -161,6 +216,9 @@ public class ScheduleResourceIntTest {
 
         // Update the schedule
         Schedule updatedSchedule = scheduleRepository.findOne(schedule.getId());
+        updatedSchedule
+            .startTime(UPDATED_START_TIME)
+            .endTime(UPDATED_END_TIME);
 
         restScheduleMockMvc.perform(put("/api/schedules")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -171,6 +229,8 @@ public class ScheduleResourceIntTest {
         List<Schedule> scheduleList = scheduleRepository.findAll();
         assertThat(scheduleList).hasSize(databaseSizeBeforeUpdate);
         Schedule testSchedule = scheduleList.get(scheduleList.size() - 1);
+        assertThat(testSchedule.getStartTime()).isEqualTo(UPDATED_START_TIME);
+        assertThat(testSchedule.getEndTime()).isEqualTo(UPDATED_END_TIME);
     }
 
     @Test

@@ -2,7 +2,9 @@ package com.mycompany.myapp.domain;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -18,6 +20,14 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Column(name = "start_time", nullable = false)
+    private ZonedDateTime startTime;
+
+    @NotNull
+    @Column(name = "end_time", nullable = false)
+    private ZonedDateTime endTime;
+
     @ManyToOne
     private Room room;
 
@@ -31,6 +41,32 @@ public class Schedule implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public ZonedDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Schedule startTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+        return this;
+    }
+
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public ZonedDateTime getEndTime() {
+        return endTime;
+    }
+
+    public Schedule endTime(ZonedDateTime endTime) {
+        this.endTime = endTime;
+        return this;
+    }
+
+    public void setEndTime(ZonedDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public Room getRoom() {
@@ -84,6 +120,8 @@ public class Schedule implements Serializable {
     public String toString() {
         return "Schedule{" +
             "id=" + getId() +
+            ", startTime='" + getStartTime() + "'" +
+            ", endTime='" + getEndTime() + "'" +
             "}";
     }
 }

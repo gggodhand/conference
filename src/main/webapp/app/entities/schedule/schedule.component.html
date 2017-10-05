@@ -17,6 +17,8 @@
             <thead>
             <tr>
             <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="conferenceApp.schedule.startTime">Start Time</span></th>
+            <th><span jhiTranslate="conferenceApp.schedule.endTime">End Time</span></th>
             <th><span jhiTranslate="conferenceApp.schedule.room">Room</span></th>
             <th><span jhiTranslate="conferenceApp.schedule.presentation">Presentation</span></th>
             <th></th>
@@ -25,6 +27,8 @@
             <tbody>
             <tr *ngFor="let schedule of schedules ;trackBy: trackId">
                 <td><a [routerLink]="['../schedule', schedule.id ]">{{schedule.id}}</a></td>
+                <td>{{schedule.startTime | date:'medium'}}</td>
+                <td>{{schedule.endTime | date:'medium'}}</td>
                 <td>
                     <div *ngIf="schedule.room">
                         <a [routerLink]="['../room', schedule.room?.id ]" >{{schedule.room?.name}}</a>

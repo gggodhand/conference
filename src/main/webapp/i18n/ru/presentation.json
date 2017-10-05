@@ -1,0 +1,23 @@
+{
+    "conferenceApp": {
+        "presentation" : {
+            "home": {
+                "title": "Presentations",
+                "createLabel": "Создать новый Presentation",
+                "createOrEditLabel": "Создать или отредактировать Presentation"
+            },
+            "created": "Новый Presentation создан с идентификатором {{ param }}",
+            "updated": "Presentation обновлен с идентификатором {{ param }}",
+            "deleted": "Presentation удален с идентификатором {{ param }}",
+            "delete": {
+                "question": "Вы уверены что хотите удалить Presentation {{ id }}?"
+            },
+            "detail": {
+                "title": "Presentation"
+            },
+            "name": "Name",
+            "category": "Category",
+            "user": "User"
+        }
+    }
+}
