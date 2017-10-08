@@ -15,8 +15,12 @@
             "detail": {
                 "title": "Room"
             },
-            "name": "Name",
-            "schedules": "Schedules"
+            "name": "Название",
+            "schedules": "Расписания",
+            "category": "Категория",
+            "startTime": "Начало",
+            "endTime": "Конец",
+            "users": "Выступающие"
         }
     }
 }

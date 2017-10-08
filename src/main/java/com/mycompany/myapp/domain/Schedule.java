@@ -1,6 +1,8 @@
 package com.mycompany.myapp.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -21,11 +23,13 @@ public class Schedule implements Serializable {
     private Long id;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "start_time", nullable = false)
     private ZonedDateTime startTime;
 
     @NotNull
     @Column(name = "end_time", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private ZonedDateTime endTime;
 
     @ManyToOne

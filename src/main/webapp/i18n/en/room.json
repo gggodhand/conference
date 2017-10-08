@@ -16,7 +16,11 @@
                 "title": "Room"
             },
             "name": "Name",
-            "schedules": "Schedules"
+            "schedules": "Schedules",
+            "category": "Category",
+            "startTime": "Start Time",
+            "endTime": "End Time",
+            "users": "Presenters"
         }
     }
 }

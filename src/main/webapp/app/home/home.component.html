@@ -3,7 +3,7 @@
         <h1 class="display-4" jhiTranslate="home.title">Conference</h1>
         <p class="lead" jhiTranslate="home.rooms">List of rooms</p>
 
-        <button (click)="load()">Refresh</button>
+        <!--<button (click)="load()">Refresh</button>-->
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
@@ -18,35 +18,37 @@
 
         <div class="room" *ngIf="rooms">
             <div *ngFor="let room of rooms ;trackBy: trackId">
-                <div class="alert alert-info" role="alert">
-                    {{room.name}}
-                    <span class="badge badge-secondary">{{room.schedules.length}}</span>
-                </div>
+                <div *ngIf="room.schedules.length > 0">
+                    <div class="alert alert-info" role="alert">
+                        {{room.name}}
+                        <span class="badge badge-secondary">{{room.schedules.length}}</span>
+                    </div>
 
-                <table *ngIf="room.schedules" class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th><span jhiTranslate="conferenceApp.room.name">Name</span></th>
-                        <th><span jhiTranslate="conferenceApp.room.category">Category</span></th>
-                        <th><span jhiTranslate="conferenceApp.room.startTime">Category</span></th>
-                        <th><span jhiTranslate="conferenceApp.room.endTime">Category</span></th>
-                        <th><span jhiTranslate="conferenceApp.room.users">Presenters</span></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let schedule of room.schedules ;trackBy: trackId">
-                        <td>{{schedule.presentation.name}}</td>
-                        <td>{{schedule.presentation.category}}</td>
-                        <td>{{schedule.startTime}}</td>
-                        <td>{{schedule.endTime}}</td>
-                        <td>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th><span jhiTranslate="conferenceApp.room.name">Name</span></th>
+                            <th><span jhiTranslate="conferenceApp.room.category">Category</span></th>
+                            <th><span jhiTranslate="conferenceApp.room.startTime">Category</span></th>
+                            <th><span jhiTranslate="conferenceApp.room.endTime">Category</span></th>
+                            <th><span jhiTranslate="conferenceApp.room.users">Presenters</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let schedule of room.schedules ;trackBy: trackId">
+                            <td>{{schedule.presentation.name}}</td>
+                            <td>{{schedule.presentation.category}}</td>
+                            <td>{{schedule.startTime}}</td>
+                            <td>{{schedule.endTime}}</td>
+                            <td>
                             <span class="badge badge-dark" *ngFor="let user of schedule.presentation.users">
                                 {{user.firstName}}
                             </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
