@@ -204,6 +204,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public Page<UserDTO> getAllPresenters(Pageable pageable) {
+        Authority authority = authorityRepository.findOne(AuthoritiesConstants.PRESENTER);
+        return userRepository.findAllWithAuthorities(pageable, authority).map(UserDTO::new);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
     }

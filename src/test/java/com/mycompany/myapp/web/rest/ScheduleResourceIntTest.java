@@ -116,6 +116,38 @@ public class ScheduleResourceIntTest {
 
     @Test
     @Transactional
+    public void createScheduleWithExistingInterval() throws Exception {
+        int databaseSizeBeforeCreate = scheduleRepository.findAll().size();
+
+        Schedule scheduleNew1 = new Schedule()
+            .startTime(UPDATED_START_TIME.minusHours(1))
+            .endTime(UPDATED_START_TIME.plusHours(1));
+
+        Schedule scheduleNew2 = new Schedule()
+            .startTime(UPDATED_START_TIME.minusHours(1))
+            .endTime(UPDATED_START_TIME);
+
+        // Create the Schedule
+        restScheduleMockMvc.perform(post("/api/schedules")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(scheduleNew1)))
+            .andExpect(status().isCreated());
+
+        // Validate the Schedule in the database
+        List<Schedule> scheduleList = scheduleRepository.findAll();
+        assertThat(scheduleList).hasSize(databaseSizeBeforeCreate + 1);
+        Schedule testSchedule = scheduleList.get(scheduleList.size() - 1);
+        assertThat(testSchedule.getStartTime()).isEqualTo(UPDATED_START_TIME.minusHours(1));
+        assertThat(testSchedule.getEndTime()).isEqualTo(UPDATED_START_TIME.plusHours(1));
+
+        restScheduleMockMvc.perform(post("/api/schedules")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(scheduleNew2)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Transactional
     public void createScheduleWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = scheduleRepository.findAll().size();
 
