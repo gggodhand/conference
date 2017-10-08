@@ -1,11 +1,14 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mycompany.myapp.service.dto.ScheduleDTO;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A Room.
@@ -26,7 +29,7 @@ public class Room implements Serializable {
 
     @Transient
     @JsonProperty
-    private List<Schedule> schedules = new ArrayList<>();
+    private List<ScheduleDTO> schedules = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public Long getId() {
@@ -50,16 +53,16 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public List<Schedule> getSchedules() {
+    public List<ScheduleDTO> getSchedules() {
         return schedules;
     }
 
-    public Room schedules(List<Schedule> schedules) {
+    public Room schedules(List<ScheduleDTO> schedules) {
         this.schedules = schedules;
         return this;
     }
 
-    public void setSchedules(List<Schedule> schedules) {
+    public void setSchedules(List<ScheduleDTO> schedules) {
         this.schedules = schedules;
     }
 

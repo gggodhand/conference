@@ -3,12 +3,11 @@ package com.mycompany.myapp.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.Presentation;
 import com.mycompany.myapp.domain.Room;
-
-import com.mycompany.myapp.domain.Schedule;
 import com.mycompany.myapp.repository.PresentationRepository;
 import com.mycompany.myapp.repository.RoomRepository;
 import com.mycompany.myapp.repository.ScheduleRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
+import com.mycompany.myapp.service.dto.ScheduleDTO;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -114,7 +112,7 @@ public class RoomResource {
                     .map(schedule -> {
                         Presentation presentation = presentationRepository.findOneWithEagerRelationships(schedule.getPresentation().getId());
                         schedule.setPresentation(presentation);
-                        return schedule;
+                        return new ScheduleDTO(schedule);
                     })
                     .collect(Collectors.toList())
         ));
