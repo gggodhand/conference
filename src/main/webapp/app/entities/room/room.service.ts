@@ -41,7 +41,7 @@ export class RoomService {
 
     queryWithPresentations(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(SERVER_API_URL + 'api/roomPresentations', options)
+        return this.http.get(SERVER_API_URL + 'api/rooms/presentations', options)
             .map((res: Response) => this.convertResponse(res));
     }
 

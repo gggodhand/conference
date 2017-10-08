@@ -26,7 +26,7 @@ public class Room implements Serializable {
 
     @Transient
     @JsonProperty
-    private List<Presentation> presentations = new ArrayList<>();
+    private List<Schedule> schedules = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public Long getId() {
@@ -50,19 +50,18 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public List<Presentation> getPresentations() {
-        return presentations;
+    public List<Schedule> getSchedules() {
+        return schedules;
     }
 
-    public Room presentations(List<Presentation> presentations) {
-        this.presentations = presentations;
+    public Room schedules(List<Schedule> schedules) {
+        this.schedules = schedules;
         return this;
     }
 
-    public void setPresentations(List<Presentation> presentations) {
-        this.presentations = presentations;
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
-    // jhipster-needle-entity-add-getters-setters - Jhipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {

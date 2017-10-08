@@ -5,6 +5,7 @@ import com.mycompany.myapp.domain.Presentation;
 import com.mycompany.myapp.domain.Room;
 
 import com.mycompany.myapp.domain.Schedule;
+import com.mycompany.myapp.repository.PresentationRepository;
 import com.mycompany.myapp.repository.RoomRepository;
 import com.mycompany.myapp.repository.ScheduleRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
@@ -37,10 +38,12 @@ public class RoomResource {
 
     private final RoomRepository roomRepository;
     private final ScheduleRepository scheduleRepository;
+    private final PresentationRepository presentationRepository;
 
-    public RoomResource(RoomRepository roomRepository, ScheduleRepository scheduleRepository) {
+    public RoomResource(RoomRepository roomRepository, ScheduleRepository scheduleRepository, PresentationRepository presentationRepository) {
         this.roomRepository = roomRepository;
         this.scheduleRepository = scheduleRepository;
+        this.presentationRepository = presentationRepository;
     }
 
     /**
@@ -99,16 +102,20 @@ public class RoomResource {
         return  roomRepository.findAll();
     }
 
-    @GetMapping("/roomPresentations")
+    @GetMapping("/rooms/presentations")
     @Timed
     public List<Room> getAllRoomsWithPresentations() {
         log.debug("REST request to get all Rooms");
         List<Room> allRooms = roomRepository.findAll();
 
-        allRooms.forEach(room -> room.setPresentations(
+        allRooms.forEach(room -> room.setSchedules(
             scheduleRepository.findAllByRoom_id(room.getId())
                 .stream()
-                    .map(Schedule::getPresentation)
+                    .map(schedule -> {
+                        Presentation presentation = presentationRepository.findOneWithEagerRelationships(schedule.getPresentation().getId());
+                        schedule.setPresentation(presentation);
+                        return schedule;
+                    })
                     .collect(Collectors.toList())
         ));
 

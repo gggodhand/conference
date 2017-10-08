@@ -3,7 +3,9 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.ConferenceApp;
 
 import com.mycompany.myapp.domain.Room;
+import com.mycompany.myapp.repository.PresentationRepository;
 import com.mycompany.myapp.repository.RoomRepository;
+import com.mycompany.myapp.repository.ScheduleRepository;
 import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -44,6 +46,12 @@ public class RoomResourceIntTest {
     private RoomRepository roomRepository;
 
     @Autowired
+    private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private PresentationRepository presentationRepository;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -62,7 +70,7 @@ public class RoomResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RoomResource roomResource = new RoomResource(roomRepository, null);
+        final RoomResource roomResource = new RoomResource(roomRepository, scheduleRepository, presentationRepository);
         this.restRoomMockMvc = MockMvcBuilders.standaloneSetup(roomResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -153,6 +161,21 @@ public class RoomResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(room.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
+    }
+
+    @Test
+    @Transactional
+    public void getAllRoomsWithPresentations() throws Exception {
+        // Initialize the database
+        roomRepository.saveAndFlush(room);
+
+        // Get all the roomList
+        restRoomMockMvc.perform(get("/api/rooms/presentations"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(room.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].schedules").isArray());
     }
 
     @Test
