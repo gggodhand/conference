@@ -6,9 +6,7 @@ import com.mycompany.myapp.service.dto.ScheduleDTO;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A Room.
@@ -27,9 +25,8 @@ public class Room implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Transient
-    @JsonProperty
-    private List<ScheduleDTO> schedules = new ArrayList<>();
+    @OneToMany(mappedBy = "room")
+    private Set<Schedule> schedules = new HashSet<>();
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public Long getId() {
@@ -53,16 +50,16 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public List<ScheduleDTO> getSchedules() {
+    public Set<Schedule> getSchedules() {
         return schedules;
     }
 
-    public Room schedules(List<ScheduleDTO> schedules) {
+    public Room schedules(Set<Schedule> schedules) {
         this.schedules = schedules;
         return this;
     }
 
-    public void setSchedules(List<ScheduleDTO> schedules) {
+    public void setSchedules(Set<Schedule> schedules) {
         this.schedules = schedules;
     }
 

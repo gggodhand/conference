@@ -7,6 +7,7 @@ import com.mycompany.myapp.repository.PresentationRepository;
 import com.mycompany.myapp.repository.RoomRepository;
 import com.mycompany.myapp.repository.ScheduleRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
+import com.mycompany.myapp.service.dto.RoomDTO;
 import com.mycompany.myapp.service.dto.ScheduleDTO;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -102,22 +103,10 @@ public class RoomResource {
 
     @GetMapping("/rooms/presentations")
     @Timed
-    public List<Room> getAllRoomsWithPresentations() {
+    public List<RoomDTO> getAllRoomsWithPresentations() {
         log.debug("REST request to get all Rooms");
-        List<Room> allRooms = roomRepository.findAll();
 
-        allRooms.forEach(room -> room.setSchedules(
-            scheduleRepository.findAllByRoom_id(room.getId())
-                .stream()
-                    .map(schedule -> {
-                        Presentation presentation = presentationRepository.findOneWithEagerRelationships(schedule.getPresentation().getId());
-                        schedule.setPresentation(presentation);
-                        return new ScheduleDTO(schedule);
-                    })
-                    .collect(Collectors.toList())
-        ));
-
-        return allRooms;
+        return roomRepository.findAll().stream().map(room -> new RoomDTO(room)).collect(Collectors.toList());
     }
     /**
      * GET  /rooms/:id : get the "id" room.

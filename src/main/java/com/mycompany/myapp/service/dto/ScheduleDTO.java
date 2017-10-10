@@ -2,7 +2,6 @@ package com.mycompany.myapp.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mycompany.myapp.domain.Presentation;
 import com.mycompany.myapp.domain.Schedule;
 
 import java.time.ZonedDateTime;
@@ -18,7 +17,7 @@ public class ScheduleDTO {
     private ZonedDateTime endTime;
 
     @JsonProperty
-    private Presentation presentation;
+    private PresentationDTO presentation;
 
     public ScheduleDTO() {
 
@@ -28,6 +27,6 @@ public class ScheduleDTO {
         this.id = schedule.getId();
         this.startTime = schedule.getStartTime();
         this.endTime = schedule.getEndTime();
-        this.presentation = schedule.getPresentation();
+        this.presentation = new PresentationDTO(schedule.getPresentation());
     }
 }
